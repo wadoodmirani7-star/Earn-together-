@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaskEarn — Earn by Completing Tasks</title>
+<style>
+:root{--navy:#101b55;--blue:#4938ef;--green:#19c985;--ink:#17234a;--muted:#66718e;--bg:#f4f7ff;--line:#e3e9fb;--gold:#ffcf4a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink)}
+button,input,select{font:inherit}button{cursor:pointer;border:0}
+.app{max-width:480px;margin:0 auto;min-height:100vh;background:#fff;box-shadow:0 0 35px #17234a12;padding-bottom:82px}
+.top{background:linear-gradient(135deg,#10194f,#3524c9 65%,#6354ff);color:#fff;padding:22px 20px 25px;border-radius:0 0 28px 28px}
+.brand{display:flex;align-items:center;justify-content:space-between;font-weight:800;font-size:23px}.brand span{color:#48f0b0}.pill{font-size:12px;background:#ffffff20;border:1px solid #ffffff30;padding:7px 10px;border-radius:99px}
+.hero{display:flex;gap:10px;align-items:center;margin-top:24px}.hero h1{font-size:29px;line-height:1.1;margin:0 0 9px}.hero p{margin:0;color:#e0e5ff;font-size:13px;line-height:1.5}.mascot{font-size:74px;filter:drop-shadow(0 8px 8px #0002)}.primary{margin-top:19px;padding:13px 18px;border-radius:14px;background:linear-gradient(90deg,#4df2a0,#16c77f);color:#082f2a;font-weight:800}
+main{padding:18px}.balance{display:flex;justify-content:space-between;align-items:center;padding:17px;border-radius:18px;background:linear-gradient(120deg,#e9fff5,#f0f2ff);border:1px solid #d9f8e9}.balance small{color:var(--muted)}.amount{font-size:28px;font-weight:850;margin-top:4px}.walleticon{font-size:32px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:14px 0}.stat{padding:12px 8px;text-align:center;border:1px solid var(--line);border-radius:14px}.stat strong{display:block;font-size:18px}.stat small{font-size:11px;color:var(--muted)}
+.sectionhead{display:flex;justify-content:space-between;align-items:center;margin:23px 0 12px}.sectionhead h2{font-size:18px;margin:0}.sectionhead a{font-size:12px;color:var(--blue);font-weight:700;cursor:pointer}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.quick button{background:#f7f8ff;border:1px solid var(--line);border-radius:13px;padding:12px 4px;color:var(--ink);font-size:11px;font-weight:700}.quick b{display:block;font-size:23px;margin-bottom:6px}
+.task{display:flex;align-items:center;gap:11px;padding:13px 0;border-bottom:1px solid #edf0fa}.task:last-child{border-bottom:0}.taskicon{width:43px;height:43px;border-radius:13px;background:#eeeaff;display:grid;place-items:center;font-size:22px;flex-shrink:0}.taskinfo{flex:1}.taskinfo strong{font-size:13px;display:block}.taskinfo small{font-size:11px;color:var(--muted)}.reward{font-size:12px;color:#087c4e;font-weight:800;white-space:nowrap}.smallbtn{display:block;margin-top:6px;padding:7px 11px;background:var(--blue);color:#fff;border-radius:9px;font-size:11px;font-weight:700}
+.page{display:none}.page.active{display:block}.backtitle{font-weight:800;font-size:22px;margin:4px 0 15px}.notice{padding:12px 13px;background:#fff8df;border:1px solid #ffedaa;color:#66501b;border-radius:12px;font-size:12px;line-height:1.5;margin:12px 0}
+.refhero{padding:19px;border-radius:18px;background:linear-gradient(135deg,#191d67,#5040ee);color:#fff}.refhero h2{margin:0 0 8px}.refhero p{margin:0;font-size:13px;color:#e0e3ff;line-height:1.5}.refamount{font-size:28px;font-weight:900;color:#ffe56b;margin-top:10px}.progress{height:9px;background:#e8eafa;border-radius:99px;overflow:hidden;margin:10px 0}.progress span{display:block;height:100%;width:0;background:var(--green);transition:width .25s}
+.fieldlabel{display:block;font-size:12px;font-weight:750;margin:15px 0 7px}.field{width:100%;border:1px solid #dce3f6;border-radius:12px;padding:12px;background:#fff;color:var(--ink);outline:none}.field:focus{border-color:var(--blue)}.copyrow{display:flex;gap:8px}.copyrow .field{flex:1;min-width:0}.copybtn{background:#e9e7ff;color:#3b2ad6;border-radius:12px;padding:0 13px;font-weight:800}
+.methods{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.method{border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px;text-align:center;font-size:12px;font-weight:750}.method.selected{border:2px solid var(--blue);background:#f3f1ff}.method img{width:32px;height:32px;object-fit:contain;margin:0 auto 5px;display:block}.method span{display:block;font-size:11px;margin-top:2px}
+.withdrawgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}.cash{border:1px solid var(--line);background:#fff;border-radius:10px;padding:11px 3px;font-size:12px;font-weight:800}.cash.selected{background:#efedff;border:2px solid var(--blue);color:#3524c9}
+.fullbtn{width:100%;padding:14px;background:linear-gradient(90deg,#4e3af2,#3223c9);color:#fff;border-radius:13px;font-weight:800;margin-top:14px}.subtext{font-size:11px;line-height:1.5;color:var(--muted)}.empty{padding:18px;text-align:center;color:var(--muted);font-size:13px}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(480px,100%);display:grid;grid-template-columns:repeat(5,1fr);padding:9px 4px calc(9px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--line);box-shadow:0 -5px 20px #15245a0a;z-index:5}.bottom button{background:none;color:#77819d;font-size:10px;font-weight:700;padding:4px}.bottom button b{display:block;font-size:20px;margin-bottom:3px}.bottom button.active{color:var(--blue)}
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#17234a;color:white;padding:12px 16px;border-radius:12px;font-size:12px;display:none;max-width:90%;z-index:10;text-align:center}
+.timerbox{background:#f3f1ff;border:1px solid #dcd7ff;padding:12px;border-radius:14px;text-align:center;margin-bottom:15px;color:var(--navy);font-size:13px;font-weight:700}
+.timerbox span{color:var(--blue);font-weight:800;font-size:15px}
+@media(min-width:600px){body{padding:20px 0}.app{border-radius:25px;overflow:hidden}.bottom{bottom:20px;border-radius:0 0 25px 25px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+  <div class="brand">💰 Task<span>Earn</span><span class="pill">ONLINE</span></div>
+  <div class="hero"><div><h1>Simple Tasks.<br>Real Rewards.</h1><p>Watch video ads, complete tasks and invite friends to grow your balance.</p></div><div class="mascot">📱</div></div>
+  <button class="primary" onclick="showPage('tasks')">Start Earning&nbsp; →</button>
+</header>
+<main>
+<section id="home" class="page active">
+  <div class="balance"><div><small>Your balance</small><div class="amount" id="balance">Rs. 0</div><small>Active wallet points</small></div><div class="walleticon">👛</div></div>
+  <div class="stats"><div class="stat"><strong id="taskCount">0</strong><small>Tasks done</small></div><div class="stat"><strong id="refCount">0/5</strong><small>Referrals</small></div><div class="stat"><strong id="earned">Rs. 0</strong><small>Total earned</small></div></div>
+  <div class="sectionhead"><h2>Quick access</h2></div>
+  <div class="quick"><button onclick="showPage('tasks')"><b>📺</b>Tasks</button><button onclick="showPage('referral')"><b>👥</b>Referral</button><button onclick="showPage('wallet')"><b>💳</b>Withdraw</button><button onclick="showPage('history')"><b>📋</b>History</button></div>
+  <div class="sectionhead"><h2>Featured tasks</h2><a onclick="showPage('tasks')">View all</a></div>
+  <div id="featured"></div>
+  <div class="notice">⚠️ Complete tasks and refer your friends to earn actual rewards directly into your preferred wallet account.</div>
+</section>
+<section id="tasks" class="page">
+  <div class="backtitle">🧩 Available Tasks</div>
+  <div class="timerbox">Tasks reset in: <span id="resetTimer">00h 00m 00s</span></div>
+  <p class="subtext">Complete the actions below to instantly add rewards to your main account balance. Completed tasks reset daily at midnight (12:00 AM).</p>
+  <div id="taskList"></div>
+</section>
+<section id="referral" class="page">
+  <div class="backtitle">👥 Referral Program</div>
+  <div class="refhero"><h2>Invite friends, earn more!</h2><p>Rule: Rs. 30 per eligible referral. Five referrals are required to unlock withdrawal requests.</p><div class="refamount">Rs. 30 <small style="font-size:13px">/ referral</small></div></div>
+  <div class="sectionhead"><h2>Your referral progress</h2><strong id="refProgressText">0 / 5</strong></div><div class="progress"><span id="refProgress"></span></div>
+  <label class="fieldlabel" for="refCode">Your referral code</label><div class="copyrow"><input id="refCode" class="field" readonly value="TASK-AB123"><button class="copybtn" onclick="copyCode()">Copy</button></div>
+  <label class="fieldlabel" for="referralsToAdd">Simulate referral count</label><select id="referralsToAdd" class="field"><option value="1">Add 1 referral</option><option value="2">Add 2 referrals</option><option value="5">Set to 5 referrals</option></select>
+  <button class="fullbtn" onclick="demoReferral()">Add referral reward</button>
+  <p class="subtext">Share your unique referral code with friends to speed up your withdrawal unlock.</p>
+</section>
+<section id="wallet" class="page">
+  <div class="backtitle">💳 Wallet & Withdrawal</div>
+  <div class="balance"><div><small>Available balance</small><div class="amount" id="walletBalance">Rs. 0</div></div><div class="walleticon">💸</div></div>
+  <div class="notice">Withdrawal limits: minimum Rs. 100 • maximum Rs. 5,000 per request. Select your payout method below.</div>
+  <div class="sectionhead"><h2>Choose amount</h2></div>
+  <div class="withdrawgrid"><button class="cash selected" onclick="selectAmount(100,this)">Rs. 100</button><button class="cash" onclick="selectAmount(200,this)">Rs. 200</button><button class="cash" onclick="selectAmount(500,this)">Rs. 500</button><button class="cash" onclick="selectAmount(1000,this)">Rs. 1,000</button><button class="cash" onclick="selectAmount(2000,this)">Rs. 2,000</button><button class="cash" onclick="selectAmount(5000,this)">Rs. 5,000</button></div>
+  <label class="fieldlabel">Payment method</label>
+  <div class="methods">
+    <button class="method selected" onclick="selectMethod('Easypaisa',this)">
+      <img src="https://i.ibb.co/30V5H20/easypaisa-logo.png" alt="Easypaisa" onerror="this.outerHTML='<span>🟢</span>'">
+      <span>Easypaisa</span>
+    </button>
+    <button class="method" onclick="selectMethod('JazzCash',this)">
+      <img src="https://i.ibb.co/6w2hP20/jazzcash-logo.png" alt="JazzCash" onerror="this.outerHTML='<span>🔴</span>'">
+      <span>JazzCash</span>
+    </button>
+    <button class="method" onclick="selectMethod('Mastercard',this)">
+      <img src="httpsupload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard">
+      <span>Mastercard</span>
+    </button>
+  </div>
+  <label class="fieldlabel" for="account">Wallet number or card reference</label><input id="account" class="field" placeholder="Enter account number/reference" autocomplete="off">
+  <button class="fullbtn" onclick="requestWithdrawal()">Request withdrawal</button>
+  <p class="subtext">Payouts are processed securely within 24 hours to your chosen mobile account or card.</p>
+</section>
+<section id="history" class="page">
+  <div class="backtitle">📜 Activity History</div><div id="historyList" class="empty">No activity yet. Complete a task to see it here.</div>
+  <button class="fullbtn" onclick="clearHistory()">Clear history</button>
+</section>
+<section id="profile" class="page">
+  <div class="backtitle">👤 Profile</div><div class="balance"><div><small>User account</small><div class="amount" style="font-size:20px">TaskEarn Member</div><small>Account status: Active</small></div><div class="walleticon">🙂</div></div>
+  <div class="notice">Manage your account credentials and app data safely from your device.</div>
+  <button class="fullbtn" onclick="resetDemo()">Reset account data</button>
+</section>
+</main>
+<nav class="bottom">
+<button class="active" data-page="home" onclick="showPage('home')"><b>��</b>Home</button>
+<button data-page="tasks" onclick="showPage('tasks')"><b>☑</b>Tasks</button>
+<button data-page="referral" onclick="showPage('referral')"><b>♧</b>Referral</button>
+<button data-page="wallet" onclick="showPage('wallet')"><b>▣</b>Wallet</button>
+<button data-page="profile" onclick="showPage('profile')"><b>��</b>Profile</button>
+</nav>
+<div id="toast" class="toast" role="status"></div>
+</div>
+<script>
+const taskData=[
+ {icon:'📺',name:'Watch Video Ad',desc:'Watch a 30-second video ad',reward:5,url:'https://www.google.com'},
+ {icon:'📲',name:'Try a Sample App',desc:'Download and explore an app',reward:15,url:'https://www.google.com'},
+ {icon:'📝',name:'Complete a Survey',desc:'Answer a short feedback survey',reward:10,url:'https://www.google.com'},
+ {icon:'🔗',name:'Share a Link',desc:'Share referral link socially',reward:8,url:'https://www.google.com'},
+ {icon:'📋',name:'Simple Data Entry',desc:'Complete a short text entry form',reward:12,url:'https://www.google.com'}
+];
+let state={balance:0,earned:0,taskCount:0,referrals:0,history:[],done:[],withdrawals:[],lastResetDate:''};
+let chosenAmount=100,chosenMethod='Easypaisa';
+
+function getTodayDateString(){
+  const d=new Date();
+  return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+}
+
+function checkDailyReset(){
+  const today=getTodayDateString();
+  if(state.lastResetDate!==today){
+    state.done=[];
+    state.lastResetDate=today;
+    save();
+  }
+}
+
+try{
+  const saved=localStorage.getItem('taskEarnApp');
+  if(saved){state={...state,...JSON.parse(saved)}}
+}catch(e){}
+
+checkDailyReset();
+
+function updateCountdown(){
+  const now=new Date();
+  const nextMidnight=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1,0,0,0);
+  const diff=nextMidnight-now;
+  const hrs=Math.floor(diff/(1000*60*60));
+  const mins=Math.floor((diff%(1000*60*60))/(1000*60));
+  const secs=Math.floor((diff%(1000*60))/1000);
+  const timerEl=document.getElementById('resetTimer');
+  if(timerEl){
+    timerEl.textContent=`${String(hrs).padStart(2,'0')}h ${String(mins).padStart(2,'0')}m ${String(secs).padStart(2,'0')}s`;
+  }
+  if(diff<=1000){
+    setTimeout(()=>{checkDailyReset();render()},1000);
+  }
+}
+setInterval(updateCountdown,1000);
+
+function save(){try{localStorage.setItem('taskEarnApp',JSON.stringify(state))}catch(e){}render()}
+function money(n){return 'Rs. '+Number(n).toLocaleString('en-PK')}
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.style.display='block';clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.style.display='none',2800)}
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.bottom button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));if(id==='wallet')document.getElementById('walletBalance').textContent=money(state.balance);window.scrollTo({top:0,behavior:'smooth'})}
+
+function taskHTML(t,i){
+  const done=state.done.includes(i);
+  return `<div class="task">
+    <div class="taskicon">${t.icon}</div>
+    <div class="taskinfo">
+      <strong>${t.name}</strong>
+      <small>${t.desc}</small>
+      <button class="smallbtn" ${done?'disabled style="background:#a7b0c6"':''} onclick="completeTask(${i})">
+        ${done?'Completed':'Complete task'}
+      </button>
+    </div>
+    <div class="reward">+ ${money(t.reward)}</div>
+  </div>`;
+}
+
+function render(){
+  checkDailyReset();
+  document.getElementById('balance').textContent=money(state.balance);
+  document.getElementById('walletBalance').textContent=money(state.balance);
+  document.getElementById('taskCount').textContent=state.taskCount;
+  document.getElementById('refCount').textContent=Math.min(state.referrals,5)+'/5';
+  document.getElementById('earned').textContent=money(state.earned);
+  document.getElementById('refProgressText').textContent=Math.min(state.referrals,5)+' / 5';
+  document.getElementById('refProgress').style.width=Math.min(state.referrals,5)*20+'%';
+  document.getElementById('taskList').innerHTML=taskData.map(taskHTML).join('');
+  document.getElementById('featured').innerHTML=taskData.slice(0,3).map(taskHTML).join('');
+  document.getElementById('historyList').innerHTML=state.history.length?state.history.slice().reverse().map(x=>`<div class="task"><div class="taskicon">📌</div><div class="taskinfo"><strong>${escapeHTML(x.title)}</strong><small>${escapeHTML(x.date)}</small></div><div class="reward">${escapeHTML(x.amount)}</div></div>`).join(''):'<div class="empty">No activity yet. Complete a task to see it here.</div>';
+  updateCountdown();
+}
+
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function addHistory(title,amount){state.history.push({title,amount,date:new Date().toLocaleString()})}
+
+function completeTask(i){
+  checkDailyReset();
+  if(state.done.includes(i)){
+    toast('You have already completed this task today.');
+    return;
+  }
+  const t=taskData[i];
+  if(t.url){
+    window.open(t.url, '_blank');
+  }
+  state.done.push(i);
+  state.balance+=t.reward;
+  state.earned+=t.reward;
+  state.taskCount++;
+  addHistory(t.name, '+'+money(t.reward));
+  save();
+  toast('Reward added: '+money(t.reward));
+}
+
+function demoReferral(){const add=Number(document.getElementById('referralsToAdd').value);const before=state.referrals;state.referrals=Math.min(5,state.referrals+add);const gained=state.referrals-before;const reward=gained*30;state.balance+=reward;state.earned+=reward;if(gained){addHistory('Referral reward ('+gained+')','+'+money(reward));save();toast('Referral reward added: '+money(reward))}else toast('Referral progress is already at 5/5.')}
+function copyCode(){const input=document.getElementById('refCode');input.select();try{document.execCommand('copy');toast('Demo referral code copied.')}catch(e){toast('Your code is TASK-AB123')}}
+function selectAmount(amount,el){chosenAmount=amount;document.querySelectorAll('.cash').forEach(b=>b.classList.remove('selected'));el.classList.add('selected')}
+function selectMethod(method,el){chosenMethod=method;document.querySelectorAll('.method').forEach(b=>b.classList.remove('selected'));el.classList.add('selected')}
+function requestWithdrawal(){const account=document.getElementById('account').value.trim();if(chosenAmount<100||chosenAmount>5000){toast('Choose an amount between Rs. 100 and Rs. 5,000.');return}if(chosenAmount>state.balance){toast('Your balance is too low for this request.');return}if(state.referrals<5){toast('Complete 5 referrals to unlock withdrawal.');return}if(!account){toast('Enter your wallet number or card reference.');return}state.balance-=chosenAmount;state.withdrawals.push({amount:chosenAmount,method:chosenMethod});addHistory('Withdrawal request — '+chosenMethod,'−'+money(chosenAmount));save();toast('Withdrawal request submitted successfully.');document.getElementById('account').value=''}
+function clearHistory(){state.history=[];save();toast('History cleared.')}
+function resetDemo(){if(confirm('Reset all account data?')){state={balance:0,earned:0,taskCount:0,referrals:0,history:[],done:[],withdrawals:[],lastResetDate:''};save();showPage('home');toast('Account data reset.')}}
+
+render();
+</script>
+</body>
+</html>
